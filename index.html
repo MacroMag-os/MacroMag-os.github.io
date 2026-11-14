@@ -29,6 +29,8 @@
   </script>
 
   <style>
+    .logo-box { display: flex; justify-content: center; margin-bottom: 1.25rem; }
+.logo-box svg { width: 76px; height: auto; filter: drop-shadow(0 4px 12px rgba(240, 185, 11, 0.25)); }
     :root { --bg: #0d1117; --card: #161b22; --text: #e6edf3; --muted: #8b949e; --accent: #f0b90b; --border: #30363d; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem 1rem; }
@@ -53,6 +55,15 @@
 <body>
   <div class="container">
     <header>
+      <div class="logo-box">
+  <svg viewBox="0 0 120 170" fill="none" xmlns="http://w3.org" aria-label="MacroMag Logo">
+    <!-- Górne M -->
+    <path d="M36 10 H48 L60 44 L72 10 H84 V68 H73 V33 L60 66 L47 33 V68 H36 V10 Z" fill="#f0b90b"/>
+    <!-- Dolne M -->
+    <path d="M18 62 H34 L60 116 L86 62 H102 V158 H86 V95 L60 148 L34 95 V158 H18 V62 Z" fill="#e6edf3"/>
+  </svg>
+      </div>
+      
       <div class="badge">GPL v3.0 • Open-Source Collective</div>
       <h1>MacroMag Foundation</h1>
       <p class="subtitle">Modular Online Computing Architecture & Anti E-Waste Hardware-Software Collective. Online But Always Updating.</p>
