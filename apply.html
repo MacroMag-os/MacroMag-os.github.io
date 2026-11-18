@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Application - MacroMag Foundation</title>
+<meta name="description" content="Apply to contribute to MacroMag Foundation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="MacroMag Foundation - home"><span class="logo-mm" aria-hidden="true">M<span>M</span></span></a>
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
+  <nav id="mainNav" aria-label="Main">
+    <ul><li><a href="license.html">License</a></li><li><a href="about.html">About Us</a></li><li><a href="job.html">Job</a></li><li><a href="certification.html">Certification</a></li><li><a href="contact.html">Contact</a></li><li><a href="docs.html">Docs</a></li></ul>
+  </nav>
+</header>
+<main>
+<section class="doc narrow">
+  <h1>Job Application</h1>
+  <p>Fill in the form and your mail app will open with a ready message to <strong>macromagfoundation@gmail.com</strong>. Nothing is sent until you press send in your mail app.</p>
+  <form id="applyForm" class="form" novalidate>
+    <label for="f-name">Name And Surname</label>
+    <input id="f-name" name="name" type="text" required autocomplete="name">
+
+    <label for="f-region">Region</label>
+    <input id="f-region" name="region" type="text" autocomplete="country-name">
+
+    <label for="f-email">E-Mail</label>
+    <input id="f-email" name="email" type="email" required autocomplete="email">
+
+    <label for="f-edu">Education Level</label>
+    <input id="f-edu" name="education" type="text">
+
+    <label for="f-eng">English Level</label>
+    <input id="f-eng" name="english" type="text">
+
+    <label for="f-dob">Date Of Birth</label>
+    <input id="f-dob" name="dob" type="date" autocomplete="bday">
+
+    <label for="f-bio">Bio</label>
+    <textarea id="f-bio" name="bio" rows="5"></textarea>
+
+    <label for="f-work">Work Place Type</label>
+    <input id="f-work" name="work" type="text" placeholder="e.g. remote, hybrid, on-site">
+
+    <fieldset>
+      <legend>Have You Got MacroMag Fundamentals Certificate?</legend>
+      <label class="check"><input type="radio" name="cert" value="Yes, I Have"> Yes, I Have</label>
+      <label class="check"><input type="radio" name="cert" value="No I Haven't" checked> No I Haven't</label>
+    </fieldset>
+
+    <p id="formMsg" class="form-msg" role="status"></p>
+    <button type="submit" class="submit">Submit application</button>
+  </form>
+  <p class="small">No certificate yet? <a href="certification.html">Get certified here</a>.</p>
+</section>
+
+</main>
+<footer class="footer">
+  <p>&copy; 2026 MacroMag Foundation &middot; Licensed under <a href="license.html">GNU GPL v3.0</a></p>
+  <p class="foot-links"><a href="https://github.com/MacroMag-os/MacroMag-32" target="_blank" rel="noopener">GitHub</a> <a href="https://linkedin.com/company/macromag" target="_blank" rel="noopener">LinkedIn</a> <a href="https://opencollective.com/macromag" target="_blank" rel="noopener">Open Collective</a> <a href="https://macromag.my.canva.site/cert" target="_blank" rel="noopener">CERT</a></p>
+</footer>
+<script src="script.js"></script>
+
+</body>
+</html>
