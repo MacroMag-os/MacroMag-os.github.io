@@ -187,3 +187,8 @@ h1,h2,h3{font-family:'Oswald',Impact,sans-serif;line-height:1.15;margin:0 0 .5em
   .big-logo{flex:none;min-height:240px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* Auto-fix dla nowego logo */
+.brand, .avatar-logo { border: none !important; border-radius: 0 !important; background: transparent !important; }
+.big-logo { background: #0b0b0e !important; padding: 18px !important; border-radius: 14px !important; display: inline-flex !important; }
+.big-logo img { height: 84px !important; }
