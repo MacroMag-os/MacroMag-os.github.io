@@ -1,0 +1,53 @@
+name: Auto-Update MacroMag Logo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  replace-logo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz pliki strony
+        uses: actions/checkout@v4
+
+      - name: Podmień stare logo MM na logo.png we wszystkich plikach HTML i CSS
+        run: |
+          python3 -c '
+          import glob, re
+
+          for filepath in glob.glob("**/*.html", recursive=True):
+              with open(filepath, "r", encoding="utf-8") as f:
+                  content = f.read()
+
+              new_content = re.sub(
+                  r"<span class=\"logo-mm[^\"]*\"[^>]*>M<span>M</span></span>",
+                  "<img src=\"logo.png\" alt=\"MacroMag OS\" style=\"height: 36px; width: auto; display: block;\">",
+                  content
+              )
+
+              if new_content != content:
+                  with open(filepath, "w", encoding="utf-8") as f:
+                      f.write(new_content)
+                  print("Zaktualizowano:", filepath)
+
+          for csspath in glob.glob("**/*.css", recursive=True):
+              with open(csspath, "r", encoding="utf-8") as f:
+                  css = f.read()
+
+              css_updated = css + "\n/* Auto-fix dla nowego logo */\n.brand, .avatar-logo { border: none !important; border-radius: 0 !important; background: transparent !important; }\n.big-logo { background: #0b0b0e !important; padding: 18px !important; border-radius: 14px !important; display: inline-flex !important; }\n.big-logo img { height: 84px !important; }\n"
+
+              with open(csspath, "w", encoding="utf-8") as f:
+                  f.write(css_updated)
+              print("Zaktualizowano CSS:", csspath)
+          '
+
+      - name: Zapisz zmiany w repozytorium
+        run: |
+          git config user.name "MacroMag Bot"
+          git config user.email "bot@macromag-os.github.io"
+          git add .
+          git commit -m "Auto-update: zastąpiono stare logo MM nowym logo.png" || exit 0
+          git push
