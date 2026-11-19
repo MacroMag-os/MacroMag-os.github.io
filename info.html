@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MacroMag Foundation – Official Issuer Directory</title>
+  <meta property="og:title" content="MacroMag Foundation – Official Digital Credentials" />
+  <meta property="og:description" content="MacroMag is an experimental hardware-software architecture designed for digital sovereignty, modularity, and zero-telemetry online execution." />
+  <meta property="og:url" content="https://macromag-os.github.io" />
+  <meta property="og:image" content="https://macromag-os.github.io" />
+  <meta property="og:type" content="website" />
+  <style>
+    :root { --bg-page: #f8fafc; --bg-white: #ffffff; --border-light: #e2e8f0; --text-dark: #0f172a; --text-muted: #475569; --accent-teal: #0f766e; --verified-blue: #1d9bf0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-page); color: var(--text-dark); line-height: 1.55; }
+    .topbar { background: var(--bg-white); border-bottom: 1px solid var(--border-light); padding: 0.9rem 1.5rem; }
+    .topbar-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .brand-logo { font-weight: 800; font-size: 1.25rem; color: var(--text-dark); text-decoration: none; }
+    .brand-logo span { color: var(--accent-teal); }
+    .back-link { font-size: 0.88rem; color: var(--accent-teal); text-decoration: none; font-weight: 600; }
+    .org-header-wrapper { background: var(--bg-white); border-bottom: 1px solid var(--border-light); padding: 2rem 1.5rem 0; }
+    .org-header { max-width: 1080px; margin: 0 auto; }
+    .org-pill { display: inline-block; background: #f1f5f9; color: var(--text-muted); font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 6px; margin-bottom: 0.85rem; }
+    .org-main-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .org-text-col { flex: 1; min-width: 260px; max-width: 720px; }
+    .org-title { display: flex; align-items: center; gap: 0.45rem; font-size: 1.75rem; font-weight: 700; color: var(--accent-teal); margin-bottom: 0.75rem; }
+    .verified-icon { color: var(--verified-blue); font-size: 1.35rem; }
+    .org-desc { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+    .social-row { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1.5rem; }
+    .social-row a { color: var(--text-dark); text-decoration: none; font-size: 0.85rem; font-weight: 600; padding: 0.4rem 0.8rem; border-radius: 8px; background: #f1f5f9; border: 1px solid var(--border-light); }
+    .social-row a:hover { background: var(--accent-teal); color: #fff; }
+    .org-emblem { width: 130px; height: 100px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #0f172a; padding: 0.8rem; }
+    .org-emblem img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .tabs-bar { display: flex; gap: 1.5rem; }
+    .tab-item { padding: 0.7rem 0.2rem; font-size: 0.92rem; font-weight: 600; color: var(--text-muted); border-bottom: 3px solid transparent; text-decoration: none; }
+    .tab-item.active { color: var(--text-dark); border-bottom-color: var(--accent-teal); }
+    .catalog-section { max-width: 1080px; margin: 2rem auto 4rem; padding: 0 1.5rem; }
+    .catalog-meta { display: flex; justify-content: space-between; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--text-muted); }
+    .badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.15rem; }
+    .badge-tile { background: var(--bg-white); border: 1px solid var(--border-light); border-radius: 10px; padding: 1.15rem; display: flex; align-items: center; gap: 1.1rem; }
+    .badge-thumb { width: 76px; height: 76px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #f8fafc; }
+    .badge-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .badge-details h3 { font-size: 0.98rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .badge-details p { font-size: 0.82rem; color: var(--text-muted); }
+    .badge-tile.placeholder { background: rgba(255,255,255,0.6); border: 1px dashed #cbd5e1; }
+    .placeholder-circle { width: 66px; height: 66px; border-radius: 50%; border: 1px dashed #94a3b8; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.3rem; flex-shrink: 0; }
+    footer { text-align: center; padding: 2rem 1rem; font-size: 0.82rem; color: var(--text-muted); border-top: 1px solid var(--border-light); background: var(--bg-white); }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a href="https://macromag-os.github.io" class="brand-logo">MacroMag<span>.</span></a>
+      <a href="https://macromag-os.github.io" class="back-link">← MacroMag OS Home</a>
+    </div>
+  </div>
+
+  <section class="org-header-wrapper">
+    <div class="org-header">
+      <div class="org-pill">Organization</div>
+      <div class="org-main-row">
+        <div class="org-text-col">
+          <h1 class="org-title">MacroMag Foundation <span class="verified-icon" title="Official Issuer">✔</span></h1>
+          <p class="org-desc">MacroMag is an experimental hardware-software architecture designed for digital sovereignty, modularity, and zero-telemetry online execution. Powered by a stripped-down Linux Kernel (x86_64 &amp; RISC-V) and the Virtualized Object Shell (VOS) built in Rust and C.</p>
+          <div class="social-row">
+            <a href="https://linkedin.com/company/macromag" target="_blank">LinkedIn</a>
+            <a href="https://opencollective.com/macromag" target="_blank">Open Collective</a>
+            <a href="https://x.com/macromagfoundation" target="_blank">X</a>
+            <a href="https://github.com/MacroMag-os" target="_blank">GitHub</a>
+          </div>
+        </div>
+        <div class="org-emblem">
+          <img src="logo-mm.png" alt="MacroMag Foundation Logo" />
+        </div>
+      </div>
+      <div class="tabs-bar">
+        <a href="#badges" class="tab-item active">Badges</a>
+        <a href="https://github.com/Macromag-os/MacroMag-32" target="_blank" class="tab-item">Repository</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="catalog-section" id="badges">
+    <div class="catalog-meta">
+      <span>Showing 1 active credential</span>
+      <span>Issued via Certifier</span>
+    </div>
+    <div class="badges-grid">
+      <article class="badge-tile">
+        <div class="badge-thumb">
+          <img src="badge-macromag.png" alt="MacroMag Foundation Badge" />
+        </div>
+        <div class="badge-details">
+          <h3>MacroMag Foundation</h3>
+          <p>MacroMag Foundation</p>
+        </div>
+      </article>
+      <div class="badge-tile placeholder">
+        <div class="placeholder-circle">+</div>
+        <div class="badge-details">
+          <h3>Future Credential</h3>
+          <p>Reserved for upcoming MacroMag OS badge</p>
+        </div>
+      </div>
+      <div class="badge-tile placeholder">
+        <div class="placeholder-circle">+</div>
+        <div class="badge-details">
+          <h3>Future Credential</h3>
+          <p>Reserved for upcoming MacroMag OS badge</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 MacroMag Foundation · Licensed under GNU GPL v3.0 · Verified Digital Credentials
+  </footer>
+</body>
+</html>
