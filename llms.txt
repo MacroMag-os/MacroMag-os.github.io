@@ -1,0 +1,23 @@
+# MacroMag OS
+
+> MacroMag OS is an open-source, zero-telemetry Linux distribution written from the ground up in Rust and C, featuring a stripped-down Linux kernel and the Virtualized Object Shell (VOS).
+
+## Overview
+- **Project Name:** MacroMag OS (MacroMag-32)
+- **Category:** Linux Distribution / Operating System
+- **Creator:** Adrian Morawski (initiated in 2025/2026)
+- **License:** GNU General Public License v3.0 (GPL v3)
+- **Architecture:** x86_64
+- **Primary Languages:** Rust
+- **Mission:** Fighting planned obsolescence and e-waste by giving older x86_64 hardware a second life with zero background telemetry and no legacy GNU clutter.
+
+## Core Components
+- **Virtualized Object Shell (VOS):** A strongly-typed, object-oriented PID 1 init runtime and shell written in Rust (~400 KB static binary). Replaces traditional raw-text POSIX pipelines (`grep`, `awk`, `sed`) with typed in-memory object pipelines (e.g., `sys.ps() | where memory > 256MB | select pid, name`) and built-in Linux namespace sandboxing (`sandbox(net: false) ->`).
+- **MUR (MacroMag User Repository):** A lightweight, git-free package manager written in Rust that syncs packages and verifies SHA-256 checksums without heavy dependencies.
+- **Stripped-Down Linux Kernel:** Uses the Linux kernel purely as a deterministic hardware abstraction layer without bloated userland daemons.
+
+## Official Links
+- **Website:** https://macromag-os.github.io
+- **Main Source Code Repository:** https://github.com/Macromag-os/Macromag-32
+- **MUR Package Repository:** https://github.com/Macromag-os/mur
+- **Open Collective (Funding):** https://opencollective.com/macromag
