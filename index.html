@@ -52,6 +52,93 @@
 <li><a href="contact.html">Contact</a></li><li><a href="docs.html">Docs</a></li></ul>
   </nav>
 </header>
+
+<!-- MacroMag OS Search & Admin Widget -->
+<div id="mm-search-bar" style="margin: 15px auto; max-width: 800px; text-align: center; font-family: monospace;">
+  <button type="button" onclick="szukajNaStronie()" style="cursor: pointer; background: #222; border: 1px solid #555; color: #fff; padding: 8px 14px; border-radius: 4px; margin-right: 8px;">🔍 Szukaj (Ctrl+K)</button>
+  <button type="button" onclick="dodajWpisPrzezAPI()" style="cursor: pointer; background: #222; border: 1px solid #ffaa00; color: #fff; padding: 8px 14px; border-radius: 4px;">➕ Dodaj wpis (Admin)</button>
+  <div id="wyniki-wyszukiwania" style="text-align: left; margin-top: 10px;"></div>
+</div>
+
+<script>
+  const GITHUB_OWNER = "macromag-os";
+  const GITHUB_REPO = "macromag-os.github.io";
+  const FILE_PATH = "data.json";
+  let bazaWiedzy = [];
+
+  function zaladujBaze() {
+    fetch(FILE_PATH + "?t=" + Date.now())
+      .then(res => res.json())
+      .then(data => { bazaWiedzy = data; })
+      .catch(err => console.error("Błąd ładowania bazy:", err));
+  }
+  zaladujBaze();
+
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      szukajNaStronie();
+    }
+  });
+
+  function szukajNaStronie() {
+    const zapytanie = prompt("Szukaj w MacroMag OS (np. VOS, RISC-V, CERT):");
+    const kontener = document.getElementById("wyniki-wyszukiwania");
+    if (!zapytanie || zapytanie.trim() === "") {
+      kontener.innerHTML = "";
+      return;
+    }
+    const fraza = zapytanie.toLowerCase().trim();
+    const znalezione = bazaWiedzy.filter(item => 
+      item.tytul.toLowerCase().includes(fraza) || 
+      item.opis.toLowerCase().includes(fraza)
+    );
+    if (znalezione.length > 0) {
+      kontener.innerHTML = znalezione.map(item => `
+        <div style="border-left: 3px solid #00ff88; padding-left: 10px; margin-top: 10px;">
+          <strong><a href="${item.link}" style="color: #00ff88;">${item.tytul}</a></strong><br>
+          <small>${item.opis}</small>
+        </div>
+      `).join("");
+    } else {
+      kontener.innerHTML = `<p style="color: #ff5555;">Brak wyników dla: "${zapytanie}"</p>`;
+    }
+  }
+
+  async function dodajWpisPrzezAPI() {
+    const token = prompt("Wklej swój GitHub Personal Access Token (PAT):");
+    if (!token) return;
+    const tytul = prompt("Podaj tytuł lub ID (np. CERT-2026-002):");
+    if (!tytul) return;
+    const opis = prompt("Podaj krótki opis:");
+    if (!opis) return;
+    const link = prompt("Podaj kotwicę lub link (np. #cert):", "#");
+
+    const apiUrl = `https://github.com{GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+    try {
+      const getRes = await fetch(apiUrl, { headers: { "Authorization": `Bearer ${token}` } });
+      if (!getRes.ok) throw new Error("Błąd autoryzacji lub brak pliku data.json.");
+      const fileData = await getRes.json();
+      const currentJson = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+      currentJson.push({ tytul: tytul.trim(), opis: opis.trim(), link: link.trim() });
+      const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentJson, null, 2))));
+      const putRes = await fetch(apiUrl, {
+        method: "PUT",
+        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ message: `Add entry: ${tytul}`, content: updatedContent, sha: fileData.sha })
+      });
+      if (putRes.ok) {
+        alert("✅ Sukces! Wpis zapisany. Strona odświeży się za ~30 sekund.");
+        zaladujBaze();
+      } else {
+        alert("❌ Błąd podczas zapisywania commita.");
+      }
+    } catch (err) {
+      alert("⚠️ Wystąpił błąd: " + err.message);
+    }
+  }
+</script>
+
 <main>
 <section class="hero">
   <div class="hero-img" role="img" aria-label="Circuit board close-up (replace with img/hero.jpg)">
