@@ -53,9 +53,22 @@
   </nav>
 </header>
 <!-- MacroMag OS Search & Admin Widget -->
-<div id="mm-search-bar" style="margin: 15px auto; max-width: 800px; text-align: center; font-family: monospace;">
-  <button type="button" onclick="searchSite()" style="cursor: pointer; background: #222; border: 1px solid #555; color: #fff; padding: 8px 14px; border-radius: 4px; margin-right: 8px;">🔍 Search (Ctrl+K)</button>
-  <button type="button" onclick="addEntryViaAPI()" style="cursor: pointer; background: #222; border: 1px solid #ffaa00; color: #fff; padding: 8px 14px; border-radius: 4px;">➕ Add Entry (Admin)</button>
+<div id="mm-search-bar" style="margin: 20px auto; max-width: 800px; font-family: monospace;">
+  <div style="display: flex; gap: 8px; align-items: center;">
+    <input 
+      type="text" 
+      id="mm-search-input" 
+      oninput="filterLive()" 
+      placeholder="Search... (e.g., VOS, RISC-V, CERT)" 
+      style="width: 100%; padding: 10px 14px; font-size: 16px; background: #181818; color: #fff; border: 1px solid #555; border-radius: 4px; outline: none; font-family: inherit;"
+    >
+    <button 
+      type="button" 
+      onclick="addEntryViaAPI()" 
+      title="Add Entry (Admin)"
+      style="cursor: pointer; background: #181818; border: 1px solid #555; color: #aaa; padding: 10px 14px; border-radius: 4px; white-space: nowrap;"
+    >➕</button>
+  </div>
   <div id="search-results" style="text-align: left; margin-top: 10px;"></div>
 </div>
 
@@ -73,37 +86,43 @@
   }
   loadDatabase();
 
+  // Skrót Ctrl+K przenosi kursor bezpośrednio do paska wyszukiwania
   document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
       e.preventDefault();
-      searchSite();
+      document.getElementById("mm-search-input").focus();
     }
   });
 
-  function searchSite() {
-    const query = prompt("Search MacroMag OS (e.g., VOS, RISC-V, CERT):");
+  // Filtrowanie na żywo podczas pisania
+  function filterLive() {
+    const query = document.getElementById("mm-search-input").value;
     const container = document.getElementById("search-results");
+    
     if (!query || query.trim() === "") {
       container.innerHTML = "";
       return;
     }
+
     const term = query.toLowerCase().trim();
     const matches = knowledgeBase.filter(item => 
       item.tytul.toLowerCase().includes(term) || 
       item.opis.toLowerCase().includes(term)
     );
+
     if (matches.length > 0) {
       container.innerHTML = matches.map(item => `
-        <div style="border-left: 3px solid #00ff88; padding-left: 10px; margin-top: 10px;">
-          <strong><a href="${item.link}" style="color: #00ff88;">${item.tytul}</a></strong><br>
-          <small>${item.opis}</small>
+        <div style="border-left: 3px solid #00ff88; padding: 8px 12px; margin-top: 8px; background: #141414;">
+          <strong><a href="${item.link}" style="color: #00ff88; text-decoration: none;">${item.tytul}</a></strong><br>
+          <small style="color: #ccc;">${item.opis}</small>
         </div>
       `).join("");
     } else {
-      container.innerHTML = `<p style="color: #ff5555;">No results found for: "${query}"</p>`;
+      container.innerHTML = `<p style="color: #ff5555; margin-top: 8px;">No results found for: "${query}"</p>`;
     }
   }
 
+  // Dodawanie wpisów przez prompt() + GitHub API (dla Admina)
   async function addEntryViaAPI() {
     const token = prompt("Enter your GitHub Personal Access Token (PAT):");
     if (!token) return;
@@ -127,7 +146,7 @@
         body: JSON.stringify({ message: `Add entry: ${title}`, content: updatedContent, sha: fileData.sha })
       });
       if (putRes.ok) {
-        alert("✅ Success! Entry saved to repository. The site will update in ~30 seconds.");
+        alert("✅ Success! Entry saved to repository.");
         loadDatabase();
       } else {
         alert("❌ Failed to commit changes.");
@@ -137,6 +156,7 @@
     }
   }
 </script>
+
 
 
 
