@@ -1,0 +1,12 @@
+[
+  {
+    "tytul": "VOS - Virtualized Object Shell",
+    "opis": "Obiektowa powłoka w Rust i C zastępująca Bash.",
+    "link": "#vos"
+  },
+  {
+    "tytul": "CERT-2026-001",
+    "opis": "Certyfikat autentyczności wydania: Adrian Morawski (Valid).",
+    "link": "#cert"
+  }
+]

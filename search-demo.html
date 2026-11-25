@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>MacroMag OS - Search & Admin Demo</title>
+  <style>
+    body { background: #111; color: #eee; font-family: monospace; padding: 20px; }
+    button { cursor: pointer; background: #222; border: 1px solid #555; color: #fff; padding: 8px 14px; border-radius: 4px; margin-right: 8px; }
+    button:hover { border-color: #00ff88; }
+    .wynik { border-left: 3px solid #00ff88; padding-left: 10px; margin-top: 15px; }
+  </style>
+</head>
+<body>
+
+  <!-- Pasek akcji -->
+  <button type="button" onclick="szukajNaStronie()">🔍 Szukaj (Ctrl+K)</button>
+  <button type="button" onclick="dodajWpisPrzezAPI()" style="border-color: #ffaa00;">➕ Dodaj wpis (Admin)</button>
+
+  <div id="wyniki-wyszukiwania"></div>
+
+  <script>
+    // Konfiguracja repozytorium GitHub
+    const GITHUB_OWNER = "macromag-os";
+    const GITHUB_REPO = "macromag-os.github.io";
+    const FILE_PATH = "data.json";
+
+    let bazaWiedzy = [];
+
+    // 1. Pobieranie bazy z data.json (bez limitów API)
+    function zaladujBaze() {
+      fetch(FILE_PATH + '?t=' + Date.now()) // ?t= omija pamięć podręczną przeglądarki
+        .then(res => res.json())
+        .then(data => { bazaWiedzy = data; })
+        .catch(err => console.error("Błąd ładowania bazy:", err));
+    }
+    zaladujBaze();
+
+    // Skrót klawiszowy Ctrl + K
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        szukajNaStronie();
+      }
+    });
+
+    // 2. Wyszukiwarka dla odwiedzających
+    function szukajNaStronie() {
+      const zapytanie = prompt("Szukaj w MacroMag OS (np. VOS, RISC-V, CERT):");
+      const kontener = document.getElementById("wyniki-wyszukiwania");
+
+      if (!zapytanie || zapytanie.trim() === "") {
+        kontener.innerHTML = "";
+        return;
+      }
+
+      const fraza = zapytanie.toLowerCase().trim();
+      const znalezione = bazaWiedzy.filter(item => 
+        item.tytul.toLowerCase().includes(fraza) || 
+        item.opis.toLowerCase().includes(fraza)
+      );
+
+      if (znalezione.length > 0) {
+        kontener.innerHTML = znalezione.map(item => `
+          <div class="wynik">
+            <strong><a href="${item.link}" style="color: #00ff88;">${item.tytul}</a></strong><br>
+            <small>${item.opis}</small>
+          </div>
+        `).join("");
+      } else {
+        kontener.innerHTML = `<p style="color: #ff5555;">Brak wyników dla: "${zapytanie}"</p>`;
+      }
+    }
+
+    // 3. Panel Admina (dodawanie wpisów z telefonu przez GitHub API)
+    async function dodajWpisPrzezAPI() {
+      const token = prompt("Wklej swój GitHub Personal Access Token (PAT):");
+      if (!token) return;
+
+      const tytul = prompt("Podaj tytuł lub ID (np. CERT-2026-002):");
+      if (!tytul) return;
+
+      const opis = prompt("Podaj krótki opis:");
+      if (!opis) return;
+
+      const link = prompt("Podaj kotwicę lub link (np. #cert):", "#");
+
+      const apiUrl = `https://github.com{GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+
+      try {
+        // Pobranie aktualnego pliku z GitHuba (wymagane, aby zdobyć jego sumę kontrolną SHA)
+        const getRes = await fetch(apiUrl, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        
+        if (!getRes.ok) throw new Error("Błąd autoryzacji lub brak pliku data.json w repozytorium.");
+        
+        const fileData = await getRes.json();
+        // Dekodowanie Base64 z obsługą polskich znaków (UTF-8)
+        const currentJson = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+
+        // Dodanie nowego wpisu
+        currentJson.push({ tytul: tytul.trim(), opis: opis.trim(), link: link.trim() });
+
+        // Zakodowanie z powrotem do Base64
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentJson, null, 2))));
+
+        // Wysłanie commita przez API
+        const putRes = await fetch(apiUrl, {
+          method: "PUT",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: `Add entry: ${tytul}`,
+            content: updatedContent,
+            sha: fileData.sha
+          })
+        });
+
+        if (putRes.ok) {
+          alert("✅ Sukces! Wpis zapisany w repozytorium. Strona odświeży się za ~30 sekund.");
+          zaladujBaze();
+        } else {
+          alert("❌ Błąd podczas zapisywania commita.");
+        }
+      } catch (err) {
+        alert("⚠️ Wystąpił błąd: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
