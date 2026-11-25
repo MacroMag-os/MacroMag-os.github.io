@@ -1,12 +1,22 @@
 [
   {
     "tytul": "VOS - Virtualized Object Shell",
-    "opis": "Obiektowa powłoka w Rust i C zastępująca Bash.",
+    "opis": "Typed memory pipelines and native process sandboxing written in Rust and C, replacing legacy Bash.",
     "link": "#vos"
   },
   {
+    "tytul": "Hardware Requirements (x86_64 & RISC-V)",
+    "opis": "Zero-telemetry stripped-down Linux Kernel built for digital sovereignty and reviving legacy PCs.",
+    "link": "#kernel"
+  },
+  {
+    "tytul": "GNU GPL v3.0 License",
+    "opis": "Free open-source Community edition and future Enterprise ecosystem.",
+    "link": "#license"
+  },
+  {
     "tytul": "CERT-2026-001",
-    "opis": "Certyfikat autentyczności wydania: Adrian Morawski (Valid).",
+    "opis": "Official Release Authenticity Certificate: Adrian Morawski (Valid).",
     "link": "#cert"
   }
 ]

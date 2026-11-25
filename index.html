@@ -52,92 +52,93 @@
 <li><a href="contact.html">Contact</a></li><li><a href="docs.html">Docs</a></li></ul>
   </nav>
 </header>
-
 <!-- MacroMag OS Search & Admin Widget -->
 <div id="mm-search-bar" style="margin: 15px auto; max-width: 800px; text-align: center; font-family: monospace;">
-  <button type="button" onclick="szukajNaStronie()" style="cursor: pointer; background: #222; border: 1px solid #555; color: #fff; padding: 8px 14px; border-radius: 4px; margin-right: 8px;">🔍 Szukaj (Ctrl+K)</button>
-  <button type="button" onclick="dodajWpisPrzezAPI()" style="cursor: pointer; background: #222; border: 1px solid #ffaa00; color: #fff; padding: 8px 14px; border-radius: 4px;">➕ Dodaj wpis (Admin)</button>
-  <div id="wyniki-wyszukiwania" style="text-align: left; margin-top: 10px;"></div>
+  <button type="button" onclick="searchSite()" style="cursor: pointer; background: #222; border: 1px solid #555; color: #fff; padding: 8px 14px; border-radius: 4px; margin-right: 8px;">🔍 Search (Ctrl+K)</button>
+  <button type="button" onclick="addEntryViaAPI()" style="cursor: pointer; background: #222; border: 1px solid #ffaa00; color: #fff; padding: 8px 14px; border-radius: 4px;">➕ Add Entry (Admin)</button>
+  <div id="search-results" style="text-align: left; margin-top: 10px;"></div>
 </div>
 
 <script>
   const GITHUB_OWNER = "macromag-os";
   const GITHUB_REPO = "macromag-os.github.io";
   const FILE_PATH = "data.json";
-  let bazaWiedzy = [];
+  let knowledgeBase = [];
 
-  function zaladujBaze() {
+  function loadDatabase() {
     fetch(FILE_PATH + "?t=" + Date.now())
       .then(res => res.json())
-      .then(data => { bazaWiedzy = data; })
-      .catch(err => console.error("Błąd ładowania bazy:", err));
+      .then(data => { knowledgeBase = data; })
+      .catch(err => console.error("Database load error:", err));
   }
-  zaladujBaze();
+  loadDatabase();
 
   document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
       e.preventDefault();
-      szukajNaStronie();
+      searchSite();
     }
   });
 
-  function szukajNaStronie() {
-    const zapytanie = prompt("Szukaj w MacroMag OS (np. VOS, RISC-V, CERT):");
-    const kontener = document.getElementById("wyniki-wyszukiwania");
-    if (!zapytanie || zapytanie.trim() === "") {
-      kontener.innerHTML = "";
+  function searchSite() {
+    const query = prompt("Search MacroMag OS (e.g., VOS, RISC-V, CERT):");
+    const container = document.getElementById("search-results");
+    if (!query || query.trim() === "") {
+      container.innerHTML = "";
       return;
     }
-    const fraza = zapytanie.toLowerCase().trim();
-    const znalezione = bazaWiedzy.filter(item => 
-      item.tytul.toLowerCase().includes(fraza) || 
-      item.opis.toLowerCase().includes(fraza)
+    const term = query.toLowerCase().trim();
+    const matches = knowledgeBase.filter(item => 
+      item.tytul.toLowerCase().includes(term) || 
+      item.opis.toLowerCase().includes(term)
     );
-    if (znalezione.length > 0) {
-      kontener.innerHTML = znalezione.map(item => `
+    if (matches.length > 0) {
+      container.innerHTML = matches.map(item => `
         <div style="border-left: 3px solid #00ff88; padding-left: 10px; margin-top: 10px;">
           <strong><a href="${item.link}" style="color: #00ff88;">${item.tytul}</a></strong><br>
           <small>${item.opis}</small>
         </div>
       `).join("");
     } else {
-      kontener.innerHTML = `<p style="color: #ff5555;">Brak wyników dla: "${zapytanie}"</p>`;
+      container.innerHTML = `<p style="color: #ff5555;">No results found for: "${query}"</p>`;
     }
   }
 
-  async function dodajWpisPrzezAPI() {
-    const token = prompt("Wklej swój GitHub Personal Access Token (PAT):");
+  async function addEntryViaAPI() {
+    const token = prompt("Enter your GitHub Personal Access Token (PAT):");
     if (!token) return;
-    const tytul = prompt("Podaj tytuł lub ID (np. CERT-2026-002):");
-    if (!tytul) return;
-    const opis = prompt("Podaj krótki opis:");
-    if (!opis) return;
-    const link = prompt("Podaj kotwicę lub link (np. #cert):", "#");
+    const title = prompt("Enter title or ID (e.g., CERT-2026-002):");
+    if (!title) return;
+    const description = prompt("Enter short description:");
+    if (!description) return;
+    const link = prompt("Enter anchor or URL (e.g., #cert):", "#");
 
     const apiUrl = `https://github.com{GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
     try {
       const getRes = await fetch(apiUrl, { headers: { "Authorization": `Bearer ${token}` } });
-      if (!getRes.ok) throw new Error("Błąd autoryzacji lub brak pliku data.json.");
+      if (!getRes.ok) throw new Error("Authorization failed or data.json not found.");
       const fileData = await getRes.json();
       const currentJson = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
-      currentJson.push({ tytul: tytul.trim(), opis: opis.trim(), link: link.trim() });
+      currentJson.push({ tytul: title.trim(), opis: description.trim(), link: link.trim() });
       const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentJson, null, 2))));
       const putRes = await fetch(apiUrl, {
         method: "PUT",
         headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ message: `Add entry: ${tytul}`, content: updatedContent, sha: fileData.sha })
+        body: JSON.stringify({ message: `Add entry: ${title}`, content: updatedContent, sha: fileData.sha })
       });
       if (putRes.ok) {
-        alert("✅ Sukces! Wpis zapisany. Strona odświeży się za ~30 sekund.");
-        zaladujBaze();
+        alert("✅ Success! Entry saved to repository. The site will update in ~30 seconds.");
+        loadDatabase();
       } else {
-        alert("❌ Błąd podczas zapisywania commita.");
+        alert("❌ Failed to commit changes.");
       }
     } catch (err) {
-      alert("⚠️ Wystąpił błąd: " + err.message);
+      alert("⚠️ Error: " + err.message);
     }
   }
 </script>
+
+
 
 <main>
 <section class="hero">
