@@ -55,20 +55,23 @@
 </header>
 <!-- MacroMag OS Search & Admin Widget -->
 <div id="mm-search-bar" style="margin: 20px auto; max-width: 800px; font-family: monospace;">
-  <div style="display: flex; gap: 8px; align-items: center;">
-    <input 
-      type="text" 
-      id="mm-search-input" 
-      oninput="filterLive()" 
-      placeholder="Search... (e.g., VOS, RISC-V, CERT)" 
-      style="width: 100%; padding: 10px 14px; font-size: 16px; background: #181818; color: #fff; border: 1px solid #555; border-radius: 4px; outline: none; font-family: inherit;"
-    >
-    <button 
-      type="button" 
-      onclick="addEntryViaAPI()" 
+  <div style="max-width: 580px; margin: 20px auto 12px; padding: 0 16px;">
+  <div style="display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 999px; padding: 6px 8px 6px 18px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+    <span style="color: #64748b; font-size: 15px;">🔍</span>
+    <input
+      type="text"
+      id="mm-search-input"
+      oninput="filterLive()"
+      placeholder="Search VOS, RISC-V, CERT..."
+      style="flex: 1; border: none; background: transparent; outline: none; font-size: 14px; color: #0f172a; font-family: inherit;"
+    />
+    <button
+      type="button"
+      onclick="addEntryViaAPI()"
       title="Add Entry (Admin)"
-      style="cursor: pointer; background: #181818; border: 1px solid #555; color: #aaa; padding: 10px 14px; border-radius: 4px; white-space: nowrap;"
-    >➕</button>
+      style="cursor: pointer; background: #0f172a; border: none; color: #ffffff; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
+      +
+    </button>
   </div>
   <div id="search-results" style="text-align: left; margin-top: 10px;"></div>
 </div>
@@ -113,13 +116,13 @@
 
     if (matches.length > 0) {
       container.innerHTML = matches.map(item => `
-        <div style="border-left: 3px solid #00ff88; padding: 8px 12px; margin-top: 8px; background: #141414;">
-          <strong><a href="${item.link}" style="color: #00ff88; text-decoration: none;">${item.tytul}</a></strong><br>
-          <small style="color: #ccc;">${item.opis}</small>
+        <div style="border-left: 3px solid #16a34a; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-top: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+          <strong><a href="${item.link}" style="color: #0f172a; text-decoration: none;">${item.tytul}</a></strong><br>
+          <small style="color: #475569; font-size: 13px;">${item.opis}</small>
         </div>
       `).join("");
     } else {
-      container.innerHTML = `<p style="color: #ff5555; margin-top: 8px;">No results found for: "${query}"</p>`;
+      container.innerHTML = `<p style="color: #64748b; font-size: 13px; margin-top: 8px; padding-left: 8px;">No results found for: "${query}"</p>`;
     }
   }
 
