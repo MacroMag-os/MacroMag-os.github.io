@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MacroMag OS — Documentation & Overview</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 16px;
+    }
+    header a:hover {
+      text-decoration: underline;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      color: #ffffff;
+      font-size: 18px;
+      margin-left: 0 !important;
+    }
+    .brand img {
+      width: 28px;
+      height: 28px;
+    }
+    .container {
+      max-width: 960px;
+      margin: 32px auto;
+      padding: 0 20px 60px;
+    }
+    #readme-content h1, #readme-content h2, #readme-content h3 {
+      color: #ffffff;
+      border-bottom: 1px solid #21262d;
+      padding-bottom: 6px;
+      margin-top: 28px;
+    }
+    #readme-content a {
+      color: #58a6ff;
+    }
+    #readme-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+    #readme-content pre {
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 14px;
+      overflow-x: auto;
+    }
+    #readme-content code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background-color: rgba(110, 118, 129, 0.25);
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 90%;
+    }
+    #readme-content pre code {
+      background: none;
+      padding: 0;
+    }
+    #readme-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 16px 0;
+    }
+    #readme-content th, #readme-content td {
+      border: 1px solid #30363d;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    #readme-content th {
+      background-color: #161b22;
+      color: #ffffff;
+    }
+    #readme-content blockquote {
+      border-left: 4px solid #3fb950;
+      margin: 16px 0;
+      padding: 4px 16px;
+      color: #8b949e;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="brand">
+      <img src="https://macromag-os.github.io/logo.png" alt="MacroMag OS" />
+      <span>MacroMag OS</span>
+    </a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="main.html">System Overview</a>
+      <a href="https://github.com/MacroMag-os/MacroMag-32" target="_blank">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div id="readme-content">Loading README.md from MacroMag-32...</div>
+  </main>
+
+  <script>
+    const readmeUrl = "https://raw.githubusercontent.com/MacroMag-os/MacroMag-32/main/README.md";
+
+    fetch(readmeUrl)
+      .then(response => {
+        if (!response.ok) throw new Error("Failed to load README.md");
+        return response.text();
+      })
+      .then(markdown => {
+        const fixedMarkdown = markdown.replace(
+          /\]\((?!http)([^)]+)\)/g,
+          "](https://raw.githubusercontent.com/MacroMag-os/MacroMag-32/main/$1)"
+        );
+        document.getElementById("readme-content").innerHTML = marked.parse(fixedMarkdown);
+      })
+      .catch(err => {
+        document.getElementById("readme-content").innerHTML =
+          "<p style='color:#f85149;'>Error loading documentation: " + err.message + "</p>";
+      });
+  </script>
+
+</body>
+</html>
+
